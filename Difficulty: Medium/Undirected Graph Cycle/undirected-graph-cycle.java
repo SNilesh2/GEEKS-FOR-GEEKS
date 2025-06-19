@@ -31,7 +31,7 @@ class Solution {
         {
             if(visited[i]==false)
             {
-                if(detectcycle(i,adj,visited))
+                if(detectcycle(i,-1,adj,visited)==true)
                 {
                     return true;
                 }
@@ -39,27 +39,21 @@ class Solution {
         }
         return false;
     }
-    public static boolean detectcycle(int start,ArrayList<ArrayList<Integer>> adj,boolean[] visited )
+    public static boolean detectcycle(int s,int parent,ArrayList<ArrayList<Integer>> adj,boolean[] visited)
     {
-        Queue<Pair> q=new LinkedList<>();
-        q.add(new Pair(start,-1));
-        visited[start] = true;
-        while(!q.isEmpty())
+        visited[s]=true;
+        for(int node : adj.get(s))
         {
-            int current = q.peek().current; 
-            int parent = q.peek().parent;
-            q.poll();
-            for(int node : adj.get(current))
+            if(visited[node]==false)
             {
-                if(visited[node]==false)
-                {
-                    visited[node]=true;
-                    q.add(new Pair(node,current));
-                }
-                else if(parent != node)
+                if(detectcycle(node,s,adj,visited)==true)
                 {
                     return true;
                 }
+            }
+            else if(parent != node)
+            {
+                return true;
             }
         }
         return false;
